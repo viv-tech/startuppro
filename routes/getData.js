@@ -41,22 +41,22 @@ router.get("/startups", async (req, res) => {
     // console.log(startups);
 
     // creating array which only has founder info
-    if(startups != null && startups.length !=0){
-    startups.forEach((item, index) => {
-      startupFoundersArray.push(item.founders);
-    });
-  }
+    if (startups != null && startups.length != 0) {
+      startups.forEach((item, index) => {
+        startupFoundersArray.push(item.founders);
+      });
+    }
     // creatng array of founder data
     startupFoundersArray.forEach((item) => {
-      if(item!=null && item[0] != null && item[0]!=undefined){
-      founderArray.push(
-        new Promise((resolve, reject) => {
-          teamMemberModel
-            .findOne({ mid: item[0] })
-            .then((data) => resolve(data))
-            .catch((err) => reject(err));
-        })
-      );
+      if (item != null && item[0] != null && item[0] != undefined) {
+        founderArray.push(
+          new Promise((resolve, reject) => {
+            teamMemberModel
+              .findOne({ mid: item[0] })
+              .then((data) => resolve(data))
+              .catch((err) => reject(err));
+          })
+        );
       }
     });
 
@@ -64,11 +64,12 @@ router.get("/startups", async (req, res) => {
     // console.log(founderArray);
 
     // FETCHING JOB DETAILS DATA OF ONLY SINGLE FOUNDER RIGHT NOW
-    if(founderArray && founderArray[0] && founderArray[0].mid){
-    var jobDetailData = await jobDetailModel.findOne({
-      mid: founderArray[0].mid,
-    });
-  }
+    if (founderArray && founderArray[0] && founderArray[0].mid) {
+
+      var jobDetailData = await jobDetailModel.findOne({
+        mid: founderArray[0].mid,
+      });
+    }
     if (!jobDetailData) {
       jobDetailData = { job_title: "Founder" };
     }
@@ -188,7 +189,7 @@ router.get("/startups/:industry", async (req, res) => {
     var logoutLink = "/";
     var isEmployed = false;
 
-    if(req.session.isAuth){
+    if (req.session.isAuth) {
       isLogin = true;
       return res.status(200).render("startupLoginPosts", {
         startups,
@@ -680,7 +681,7 @@ router.get("/startup/jobalerts/:uid", isAuth, async (req, res) => {
 
     resArray = await Promise.all(resArray);
     res.status(200).render("jobAlertsPageStartup", { resArray, noAlerts });
-  } catch (e) {}
+  } catch (e) { }
 });
 
 // SEE JOB ALERTS SET BY COMPANY (FOR USERS)
@@ -726,7 +727,7 @@ router.get("/startup/jobalerts/public/:uid", async (req, res) => {
     res
       .status(200)
       .render("jobAlertsPageStartupPublic", { resArray, noAlerts });
-  } catch (e) {}
+  } catch (e) { }
 });
 
 // SEE JOB ALERTS APPLIED CANDIDATES (FOR STARTUPS)
