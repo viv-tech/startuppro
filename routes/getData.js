@@ -41,20 +41,23 @@ router.get("/startups", async (req, res) => {
     // console.log(startups);
 
     // creating array which only has founder info
-    startups.forEach((item, index) => {
-      startupFoundersArray.push(item.founders);
-    });
-
+    if (startups != null && startups.length != 0) {
+      startups.forEach((item, index) => {
+        startupFoundersArray.push(item.founders);
+      });
+    }
     // creatng array of founder data
     startupFoundersArray.forEach((item) => {
-      founderArray.push(
-        new Promise((resolve, reject) => {
-          teamMemberModel
-            .findOne({ mid: item[0] })
-            .then((data) => resolve(data))
-            .catch((err) => reject(err));
-        })
-      );
+      if (item != null && item[0] != null && item[0] != undefined) {
+        founderArray.push(
+          new Promise((resolve, reject) => {
+            teamMemberModel
+              .findOne({ mid: item[0] })
+              .then((data) => resolve(data))
+              .catch((err) => reject(err));
+          })
+        );
+      }
     });
 
     founderArray = await Promise.all(founderArray);
